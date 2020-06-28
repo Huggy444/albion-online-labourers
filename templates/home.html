@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}AO Labourer tool{% endblock %}
+
+{% block header %}
+<h1>Albion Online labourer profits per journal</h1>
+{% endblock %}
+
+{% block body %}
+<form action = "#" method = "post">
+	<p>
+		<label for= "lab">Labourer: </label>
+		<input type="text" name = "lab">
+	</p>
+	<p>
+		<label for= "tier">Tier: </label>
+		<input type="text" name = "tier">
+	</p>
+	<p>
+		<label for= "city">City: </label>
+		<input type="text" name = "city">
+	</p>
+	<p>
+		<label for= "happ">Happiness: </label>
+		<input type="text" name = "happ">
+	</p>
+	<p>
+		<input type="submit">
+	</p>
+</form>
+<p>Journal profit including tax on sales is: {{profit}}</p>
+{% endblock %}
