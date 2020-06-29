@@ -85,7 +85,7 @@ def home():
                 request_lab = "fiber"
         elif request_lab == "lumberjack":
                 request_lab = "wood"
-        elif request_lab == "stonecutter":
+        elif request_lab == "stonecutter" or request_lab == "stone cutter":
                 request_lab = "stone"
         elif request_lab == "prospector":
                 request_lab = "ore"
@@ -123,7 +123,18 @@ def home():
                 #print ("Invalid tier.")
             #else:
                 #break
-        request_tier = request.form["tier"].lower()  
+        request_tier = request.form["tier"].lower()
+
+        try:
+            num_alone_check = request_tier 
+            num_alone_check = "t"+str(int(request_tier))
+        except TypeError:
+            pass
+        else:
+            request_tier = num_alone_check
+
+            
+        print (request_tier)
 
         ##Validate happiness (with 100% / 1 as default if nothing entered)
         #while True:
@@ -191,8 +202,13 @@ def home():
         #request.items[(index*4)+1] = request.tier.upper()+"_"+item.upper()+"_level1@1"
         #request.items[(index*4)+2] = request.tier.upper()+"_"+item.upper()+"_level2@2"
         #request.items[(index*4)+3] = request.tier.upper()+"_"+item.upper()+"_level3@3"
+        #Also remove enchanted items for T3 journals, as T3 items can not be enchanted.
         for index,item in enumerate(list(laborer_outputs[query.lab][0].keys())):
+            if query.tier.lower() == "t3":
+                if "level" in item:
+                    continue
             query.items.append(query.tier.upper()+"_"+item.upper())
+
         query.item_request_string = ",".join(query.items)
         print (query.items)
         ###print (request.item_request_string)
@@ -266,4 +282,3 @@ def home():
               
 if __name__ == "__main__":
     app.run()
-    
