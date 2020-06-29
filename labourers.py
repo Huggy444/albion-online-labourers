@@ -53,7 +53,7 @@ class Query():
             zero_price(self,full_book)
 #Functions
 def zero_price(query,item):
-    self.zero_prices.append(item)
+    query.zero_prices.append(item)
     print (f"One of the materials or journals currently has no listed price on the city market. {item}")
 
 app = Flask(__name__)
@@ -253,14 +253,15 @@ def home():
               
         if len(query.zero_prices) > 0:
               zero_price_string = ",".join(query.zero_prices)
+              query.profit = f"Insufficient market data. No prices available at this city for: {zero_price_string}"
         else:
-              zero_price_string = ""
+              query.profit = round(query.profit)
         
-        return render_template(f"home.html",profit = round(query.profit),if_zero = zero_price_string)
+        return render_template(f"home.html",profit = query.profit)
     
     else:
               
-        return render_template("home.html",profit = "Please enter journal information.", if_zero = "")
+        return render_template("home.html",profit = "Please enter journal information.")
                                
               
 if __name__ == "__main__":
