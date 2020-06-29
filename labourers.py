@@ -18,6 +18,7 @@ class Query():
         self.sell_value = 0
         self.journal_values = {}
         self.profit = 0
+        self.zero_prices = []
         
     def establish_quantities(self,base_loot_amounts,laborer_outputs):
         #Take base quantity for tier and labourer type
@@ -46,12 +47,13 @@ class Query():
         self.profit += self.sell_value*0.955
         self.profit += self.journal_values["empty"]*0.955
         self.profit -= self.journal_values["full"]
-        if self.journal_values["empty"] == 0:
-            zero_price(empty_book)
+        if self.journal_values["empty"] == 0: 
+            zero_price(self,empty_book)
         if self.journal_values["full"] == 0:
-            zero_price(full_book)
+            zero_price(self,full_book)
 #Functions
-def zero_price(item):
+def zero_price(query,item):
+    self.zero_prices.append(item)
     print (f"One of the materials or journals currently has no listed price on the city market. {item}")
 
 app = Flask(__name__)
@@ -249,12 +251,16 @@ def home():
         #print ("NEWBY IS RECRUITING")
               
               
-              
-        return render_template("home.html",profit = round(query.profit))
+        if len(query.zero_prices) > 0:
+              zero_price_string = ",".join(query.zero_prices)
+        else:
+              zero_price_string = ""
+        
+        return render_template(f"home.html",profit = round(query.profit),if_zero = zero_price_string)
     
     else:
               
-        return render_template("home.html",profit = "Please enter journal information.")
+        return render_template("home.html",profit = "Please enter journal information.", if_zero = "")
                                
               
 if __name__ == "__main__":
