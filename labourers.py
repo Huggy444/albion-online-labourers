@@ -40,7 +40,7 @@ class Query():
     def material_sell(self):
         for index,item in enumerate(self.quantities):
             if self.prices[index] == 0:
-                zero_price(self.items[index])
+                zero_price(self.items[self,index])
             self.sell_value+= item*self.prices[index]
     
     def calculate_profit(self,empty_book,full_book):
