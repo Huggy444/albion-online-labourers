@@ -125,15 +125,19 @@ def home():
                 #break
         request_tier = request.form["tier"].lower()
 
-        try:
-            num_alone_check = request_tier 
-            num_alone_check = "t"+str(int(request_tier))
-        except TypeError:
-            pass
-        else:
-            request_tier = num_alone_check
+        if request_tier == "tier 3" or request_tier == "3" or request_tier =="tier3":
+            request_tier = "t3"
+        elif request_tier == "tier 4" or request_tier == "4" or request_tier =="tier4":
+            request_tier = "t3"
+        elif request_tier == "tier 5" or request_tier == "5" or request_tier =="tier5":
+            request_tier = "t5"
+        elif request_tier == "tier 6" or request_tier == "6" or request_tier =="tier6":
+            request_tier = "t6"            
+        elif request_tier == "tier 7" or request_tier == "7" or request_tier =="tier7":
+            request_tier = "t7"
+        elif request_tier == "tier 8" or request_tier == "8" or request_tier =="tier8":
+            request_tier = "t8" 
 
-            
         print (request_tier)
 
         ##Validate happiness (with 100% / 1 as default if nothing entered)
@@ -281,4 +285,4 @@ def home():
                                
               
 if __name__ == "__main__":
-    app.run()
+    app.run(debug = True)
