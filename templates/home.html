@@ -5,27 +5,93 @@
 <h1>Albion Online labourer profits per journal</h1>
 {% endblock %}
 
-{% block body %}
-<form action = "#" method = "post">
-	<p>
-		<label for= "lab">Labourer: </label>
-		<input type="text" name = "lab">
-	</p>
-	<p>
-		<label for= "tier">Tier: </label>
-		<input type="text" name = "tier">
-	</p>
-	<p>
-		<label for= "city">City: </label>
-		<input type="text" name = "city">
-	</p>
-	<p>
-		<label for= "happ">Happiness: </label>
-		<input type="text" name = "happ">
-	</p>
-	<p>
-		<input type="submit">
-	</p>
-</form>
-<p>Journal profit including tax on sales is: {{profit}}</p>
+{% block script %}
+<script>
+
+  function do_ajax()  {
+
+    var lab = document.getElementById("lab");
+    var tier = document.getElementById("tier");
+    var city = document.getElementById("city");
+    var happ = document.getElementById("happ");
+
+    var entry = {
+      lab: lab.value,
+      tier: tier.value
+      city: city.value
+      happ: happ.value
+    };
+
+    fetch('/',{
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(entry),
+      cache:"no-cache",
+      headers: new Headers({
+        "content-type":"application/json"
+      })
+    })
+
+  }
+</script>
 {% endblock %}
+
+{% block body %}
+<div class="mb-3">
+  <div class="form-group">
+    <form action="/" method="post">
+    	</p>
+    	<p>
+    		<label for= "city">City: </label>
+    		<select id="city" name = "cityDropdown">
+    			<option value="bridgewatch">Bridgewatch</option>
+      			<option value="caerleon">Caerleon</option>
+      			<option value="fort sterling">Fort Sterling</option>
+      			<option value="lymhurst">Lymhurst</option>
+      			<option value="martlock">Martlock</option>
+      			<option value="thetford">Thetford</option>
+    		</select>
+    	</p>
+    	<p>
+    		<label for= "happ">Happiness: </label>
+    		<input class="form-control" id="happ" name= "happ" rows="1" placeholder="(50% -> 150%)"></textarea>
+    	</p>
+
+<!--      <label>Name:<input type="text" id="name" value="" /></label> -->
+<!--    	<button class="btn btn-primary" onclick="do_ajax();">Request profit</button> -->
+    <p><input type="submit"></p>
+  </form>
+
+<!--    <p>{{profit}}</p> -->
+<!--     <div id="city"></div> -->
+
+  </div>
+</div>
+
+<table>
+  <tr>
+    <td>Tier 3</td>
+    <td>Tier 4</td>
+    <td>Tier 5</td>
+    <td>Tier 6</td>
+    <td>Tier 7</td>
+    <td>Tier 8</td>
+    <td>Labourer</td>
+  </tr>
+  {% for lab,dict in profits.items() %}
+  <tr>
+      <td>{{dict["t3"]}}</td>
+      <td>{{dict["t4"]}}</td>
+      <td>{{dict["t5"]}}</td>
+      <td>{{dict["t6"]}}</td>
+      <td>{{dict["t7"]}}</td>
+      <td>{{dict["t8"]}}</td>
+      <td>{{lab}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<p>{{entry}}</p>
+
+{% endblock %}
+
