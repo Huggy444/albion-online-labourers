@@ -381,6 +381,20 @@ def home():
         happiness_percent = str( (query.happiness*100) ) + "%"
         entry = "City: " + query.city + ", at happiness: " + happiness_percent
 
+        #Replace API labourer names with in-game names for front end
+        
+        query.profits["Cropper"] = query.profits.pop["fiber"]
+        query.profits["Gamekeeper"] = query.profits.pop["hide"]
+        query.profits["Fletcher"] = query.profits.pop["hunter"]
+        query.profits["Imbuer"] = query.profits.pop["mage"]
+        query.profits["Prospector"] = query.profits.pop["ore"]
+        query.profits["Stonecutter"] = query.profits.pop["stone"]
+        query.profits["Tinker"] = query.profits.pop["toolmaker"]
+        query.profits["Blacksmith"] = query.profits.pop["warrior"]
+        query.profits["Lumberjack"] = query.profits.pop["wood"]
+        
+        
+        
         return render_template(f"home.html",profits = query.profits, entry = entry)
 
 
