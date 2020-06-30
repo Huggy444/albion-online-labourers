@@ -18,6 +18,7 @@ class Query():
         self.lab_ratios = {}
         self.journals = []
         self.journal_prices = {} 
+
         
     def establish_ratios(self,laborer_outputs,lab):
         #Divide according to weightings
@@ -54,6 +55,7 @@ class Query():
             if tier == "t3":
                 break
         
+
         #if self.prices[index] == 0:
             #zero_price(self,self.items[index])
     
@@ -112,6 +114,7 @@ def home():
         #request_lab = request.form["labDropdown"].lower()
 
         ####Convert in-game lab names to api ID names
+
         #if request_lab == "tinker":
                 #request_lab = "toolmaker"
         #elif request_lab == "imbuer":
@@ -163,6 +166,7 @@ def home():
                 #print ("Invalid tier.")
             #else:
                 #break
+
         #request_tier = request.form["tierDropdown"].lower()
 
         #if request_tier == "tier 3" or request_tier == "3" or request_tier =="tier3":
@@ -257,6 +261,7 @@ def home():
         #request.items[(index*4)+2] = request.tier.upper()+"_"+item.upper()+"_level2@2"
         #request.items[(index*4)+3] = request.tier.upper()+"_"+item.upper()+"_level3@3"
         #Also remove enchanted items for T3 journals, as T3 items can not be enchanted.
+
         #for index,item in enumerate(list(laborer_outputs[query.lab][0].keys())):
             #if query.tier.lower() == "t3":
                 #if "level" in item:
@@ -371,11 +376,13 @@ def home():
 
         #####SHOUTOUT
         #print ("NEWBY IS RECRUITING")
+
         
         happiness_percent = str( (query.happiness*100) ) + "%"
         entry = "City: " + query.city + ", at happiness: " + happiness_percent
 
         return render_template(f"home.html",profits = query.profits, entry = entry)
+
 
     
     else:
