@@ -383,15 +383,15 @@ def home():
 
         #Replace API labourer names with in-game names for front end
         
-        query.profits["Cropper"] = query.profits.pop["fiber"]
-        query.profits["Gamekeeper"] = query.profits.pop["hide"]
-        query.profits["Fletcher"] = query.profits.pop["hunter"]
-        query.profits["Imbuer"] = query.profits.pop["mage"]
-        query.profits["Prospector"] = query.profits.pop["ore"]
-        query.profits["Stonecutter"] = query.profits.pop["stone"]
-        query.profits["Tinker"] = query.profits.pop["toolmaker"]
-        query.profits["Blacksmith"] = query.profits.pop["warrior"]
-        query.profits["Lumberjack"] = query.profits.pop["wood"]
+        query.profits["Cropper"] = query.profits.pop("fiber")
+        query.profits["Gamekeeper"] = query.profits.pop("hide")
+        query.profits["Fletcher"] = query.profits.pop("hunter")
+        query.profits["Imbuer"] = query.profits.pop("mage")
+        query.profits["Prospector"] = query.profits.pop("ore")
+        query.profits["Stonecutter"] = query.profits.pop("stone")
+        query.profits["Tinker"] = query.profits.pop("toolmaker")
+        query.profits["Blacksmith"] = query.profits.pop("warrior")
+        query.profits["Lumberjack"] = query.profits.pop("wood")
         
         
         
@@ -402,6 +402,7 @@ def home():
     else:
         
         base =  {}
+        lab_list = ["Cropper","Gamekeeper","Fletcher","Imbuer","Prospector","Stonecutter","Tinker","Blacksmith","Lumberjack"]
         
         for lab in lab_list:
             base[lab] = {} 
