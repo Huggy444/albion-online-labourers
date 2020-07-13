@@ -2,109 +2,229 @@
 {% block title %}AO Labourer tool{% endblock %}
 
 {% block header %}
-<div class="center">
+<div class="container">
 <h1>Albion Online labourer profits per journal</h1>
 </div>
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+  <div class="form-group row">
+    <div class="col-sm-5">
+      <div class="form-group row">
+        <label for="city" class="col-sm-2 col-form-label">City: </label>
+        <div class="col-sm-8">
+          <select id="city" class="form-control" placeholder="Please select a city">
+            <option selected>Please select a city...</option>
+            <option value="bridgewatch">Bridgewatch</option>
+            <option value="caerleon">Caerleon</option>
+            <option value="fort sterling">Fort Sterling</option>
+            <option value="lymhurst">Lymhurst</option>
+            <option value="martlock">Martlock</option>
+            <option value="thetford">Thetford</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="happ" class="col-sm-2 col-form-label">Happiness: </label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="happ" placeholder="50% to 150%">
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-2">
+        </div>
+        <div class="col-sm-8">
+          <button class="btn btn-primary" id="submitbutton">Submit</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-7">
+      <p>Returns the profit for 1 journal. Uses the calculation: labourer material output prices + empty journal price - full journal price</p>
+      <p>City: Selects the city market for buying the full journal and selling the labourer output materials and empty journal.</p>
+      <p>Happiness: The labourer happiness, this acts as a multiplier for their material output. Labourers can only work between 50 and 150% happiness.</p>
+      <p>The sales include the premium tax of 4.5%, non-premium members can expect a lower profit than shown after selling their labourer's output on the market.</p>
+      <p>A value of "N/A" is shown when one of the journals or materials for that journal has no current price on the city market.</p>
+      <p>Prices provided by the Albion Data Project.</p>
+      <p>NEWBY is recruiting</p>
+      <p></p>
+    </div>
+  </div>
+  <!-- <p>{{entry}}</p> -->
+  <!-- <label id="test"></label> -->
+  <div>
+    <div class="container">
+        <table id="table" class="table table-bordered table-hover table-sm">
+          <thead>
+            <tr>
+              <th data-field="lab" data-width="90">Labourer</th>
+              <th data-field="t3" data-width="50" data-halign="center" data-align="center" >T3</th>
+              <th data-field="t4" data-width="50 data-halign="center" data-align="center" >T4</th>
+              <th data-field="t5" data-width="50 data-halign="center" data-align="center" >T5</th>
+              <th data-field="t6" data-width="50 data-halign="center" data-align="center" >T6</th>
+              <th data-field="t7" data-width="50 data-halign="center" data-align="center" >T7</th>
+              <th data-field="t8" data-width="50 data-halign="center" data-align="center" >T8</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+  </div>
+</div>
+
+
+
 {% endblock %}
 
 {% block script %}
 <script>
 
-  function do_ajax()  {
+  // document.addEventListener("DOMContentLoaded", function(){
+  //   var $table = $('#table');
+  //   var mydata =
+  // [
+  //   {
+  //       "lab": "Cropper",
+  //       "t3": 0,
+  //       "t4": 0,
+  //       "t5": 0,
+  //       "t6": 0,
+  //       "t7": 0,
+  //       "t8": 0,
+  //   },
+  //   {
+  //       "lab": "Gamekeeper",
+  //       "t3": 0,
+  //       "t4": 0,
+  //       "t5": 0,
+  //       "t6": 0,
+  //       "t7": 0,
+  //       "t8": 0,
+  //   },
+  //   {
+  //       "lab": "Fletcher",
+  //       "t3": 0,
+  //       "t4": 0,
+  //       "t5": 0,
+  //       "t6": 0,
+  //       "t7": 0,
+  //       "t8": 0,
+  //   },
+  //   {
+  //       "lab": "Imbuer",
+  //       "t3": 0,
+  //       "t4": 0,
+  //       "t5": 0,
+  //       "t6": 0,
+  //       "t7": 0,
+  //       "t8": 0,
+  //   },
+  //   {
+  //       "lab": "Prospector",
+  //       "t3": 0,
+  //       "t4": 0,
+  //       "t5": 0,
+  //       "t6": 0,
+  //       "t7": 0,
+  //       "t8": 0,
+  //   },
+  //   {
+  //       "lab": "Stonecutter",
+  //       "t3": 0,
+  //       "t4": 0,
+  //       "t5": 0,
+  //       "t6": 0,
+  //       "t7": 0,
+  //       "t8": 0,
+  //   },
+  //   {
+  //       "lab": "Tinker",
+  //       "t3": 0,
+  //       "t4": 0,
+  //       "t5": 0,
+  //       "t6": 0,
+  //       "t7": 0,
+  //       "t8": 0,
+  //   },
+  //   {
+  //       "lab": "Blacksmith",
+  //       "t3": 0,
+  //       "t4": 0,
+  //       "t5": 0,
+  //       "t6": 0,
+  //       "t7": 0,
+  //       "t8": 0,
+  //   },
+  //   {
+  //       "lab": "Lumberjack",
+  //       "t3": 0,
+  //       "t4": 0,
+  //       "t5": 0,
+  //       "t6": 0,
+  //       "t7": 0,
+  //       "t8": 0,
+  //   }
+  // ];
 
-    var lab = document.getElementById("lab");
-    var tier = document.getElementById("tier");
+  //   $(function() {
+  //     $table.bootstrapTable({data: mydata})
+  //   });
+  // });
+
+
+  document.getElementById ("submitbutton").addEventListener ("click", submitRequest, false);
+
+  function submitRequest()  {
+    //This part takes the form IDs, assigns them to a variable, then packs the variables
+    ///into the var "entry"
     var city = document.getElementById("city");
     var happ = document.getElementById("happ");
 
     var entry = {
-      lab: lab.value,
-      tier: tier.value
-      city: city.value
+      city: city.value,
       happ: happ.value
     };
-
-    fetch('/',{
+    //This part uses fetch to pack the var entry to the URL argument as a JSON
+    fetch(`${window.origin}/profits/results`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(entry),
-      cache:"no-cache",
+      cache: "no-cache",
       headers: new Headers({
-        "content-type":"application/json"
+        "content-type": "application/json"
       })
     })
+      //This part takes the flask response.
+      .then(function (response) {
+        if (response.status !== 200) {
+          //Error handling
+          console.log(`Looks like there was a problem. Status code: ${response.status}`);
+          return;
+        }
+          //Turns the response from a strin in JSON format to a JSON object called "data"
+        response.json().then(function (data) {
+          console.log(data)
+          //the data JSON can have keys and values called as normal, and assigned to HTML IDs if wanted:
+          //document.getElementById("test").innerHTML = data[0]["lab"];
+          //Create the table with id "table". Note that if moved outside of this function data needs to be introduced with funciton(data) again or something
+
+          $(function() {
+            $('#table').bootstrapTable('destroy')
+            $('#table').bootstrapTable({data: data})
+          });
+
+        });
+
+      })
+      .catch(function (error) {
+        console.log("Fetch error: " + error);
+      });
+
 
   }
+
+
+
 </script>
 {% endblock %}
 
-{% block body %}
-<div class="center">
-  <div>
-    <p>Returns the profit for 1 journal. Uses the calculation: labourer material output prices + empty journal price - full journal price</p>
-    <p>City: Selects the city market for buying the full journal and selling the labourer output materials and empty journal.</p>
-    <p>Happiness: The labourer happiness, this acts as a multiplier for their material output. Labourers can only work between 50 and 150% happiness.</p>
-    <p>The sales include the premium tax of 4.5%, non-premium members can expect a lower profit than shown after selling their labourer's output on the market.</p>
-    <p>A value of "N/A" is shown when one of the journals or materials for that journal has no current price on the city market.</p>
-    <p>Prices provided by the Albion Data Project.</p>
-    <p>NEWBY is recruiting</p>
-    <p></p>
-  </div>
-  <p> </p>
-  <div class="form-group">
-
-    <form action="/" method="post">
-    	</p>
-    	<p>
-    		<label for= "city">City: </label>
-    		<select id="city" name = "cityDropdown">
-    			<option value="bridgewatch">Bridgewatch</option>
-      			<option value="caerleon">Caerleon</option>
-      			<option value="fort sterling">Fort Sterling</option>
-      			<option value="lymhurst">Lymhurst</option>
-      			<option value="martlock">Martlock</option>
-      			<option value="thetford">Thetford</option>
-    		</select>
-    	</p>
-    	<p>
-    		<label for= "happ">Happiness: </label>
-    		<input class="form-control" id="happ" name= "happ" rows="1" placeholder="(50% -> 150%)"></textarea>
-    	</p>
-
-<!--      <label>Name:<input type="text" id="name" value="" /></label> -->
-<!--    	<button class="btn btn-primary" onclick="do_ajax();">Request profit</button> -->
-    <p><input type="submit"></p>
-  </form>
-  <p>Results shown for {{entry}}</p>
-
-<!--    <p>{{profit}}</p> -->
-<!--     <div id="city"></div> -->
-
-  </div>
-</div>
-<div class="center">
-<table>
-  <tr>
-    <td>Tier 3</td>
-    <td>Tier 4</td>
-    <td>Tier 5</td>
-    <td>Tier 6</td>
-    <td>Tier 7</td>
-    <td>Tier 8</td>
-    <td>Labourer</td>
-  </tr>
-  {% for lab,dict in profits.items() %}
-  <tr>
-      <td>{{dict["t3"]}}</td>
-      <td>{{dict["t4"]}}</td>
-      <td>{{dict["t5"]}}</td>
-      <td>{{dict["t6"]}}</td>
-      <td>{{dict["t7"]}}</td>
-      <td>{{dict["t8"]}}</td>
-      <td>{{lab}}</td>
-  </tr>
-  {% endfor %}
-</table>
-</div>
-
-{% endblock %}
