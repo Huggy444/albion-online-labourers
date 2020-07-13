@@ -270,7 +270,7 @@ def create_entry():
     if request_happ == "":
         request_happ = "100"
 
-    request_happ = int(request_happ)
+    request_happ = float(request_happ)
 
     #Validate happiness
     if request_happ < 50 or request_happ > 150:
