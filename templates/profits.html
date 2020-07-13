@@ -39,6 +39,13 @@
           <button class="btn btn-primary" id="submitbutton">Submit</button>
         </div>
       </div>
+      <div class="form-group row">
+        <div class="col-sm-2">
+        </div>
+        <div class="col-sm-8">
+          <label id="loader"></label>
+        </div>
+      </div>
     </div>
     <div class="col-sm-7">
       <p>Returns the profit for 1 journal. Uses the calculation: labourer material output prices + empty journal price - full journal price
@@ -182,11 +189,16 @@
     ///into the var "entry"
     var city = document.getElementById("city");
     var happ = document.getElementById("happ");
+    var loading = "Loading results for " + city.value + " with " + happ.value + "% happiness"
+    var loaded = "Displaying results for " + city.value + " with " + happ.value + "% happiness"
 
     var entry = {
       city: city.value,
       happ: happ.value
     };
+
+    document.getElementById("loader").innerHTML = loading;
+
     //This part uses fetch to pack the var entry to the URL argument as a JSON
     fetch(`${window.origin}/profits/results`, {
       method: "POST",
@@ -210,7 +222,7 @@
           //the data JSON can have keys and values called as normal, and assigned to HTML IDs if wanted:
           //document.getElementById("test").innerHTML = data[0]["lab"];
           //Create the table with id "table". Note that if moved outside of this function data needs to be introduced with funciton(data) again or something
-
+          document.getElementById("loader").innerHTML = loaded
           $(function() {
             $('#table').bootstrapTable('destroy')
             $('#table').bootstrapTable({data: data})
