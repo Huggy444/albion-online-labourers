@@ -88,13 +88,12 @@ class Query():
         elif happ == 0:
             self.profits[lab][tier] = ""
     
-    
     def calculate_profit(self,lab,tier):
         empty_price = self.journal_prices[tier+"_journal_"+lab+"_empty"]
         full_price = self.journal_prices[tier+"_journal_"+lab+"_full"]
         if isinstance(self.profits[lab][tier], str):
             return
-        
+       
         #Sales tax
         self.profits[lab][tier] = self.profits[lab][tier]*0.955
         #Add empty book value after tax
@@ -297,7 +296,6 @@ def weekly_book_price_search(query):
         average_price = sum(day_prices) / len(day_prices) 
         query.journal_prices[item]= average_price
             
-
 def main_process(query):
     #Populate query with every material that can be returned from labourers (excluding journals)
     query.items = []
@@ -471,12 +469,9 @@ def payback_page():
     return render_template("payback.html",payback = base,entry = "Please submit a request")
 
 
-
 @app.route("/")
 def index():
     return redirect(url_for("house_page"))
-
-
 
 if __name__ == "__main__":
     app.run()
