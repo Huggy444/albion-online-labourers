@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block title %}AO Labourer tool{% endblock %}
+
+{% block header %}
+<div class="container" style = "padding-top: 10px;">
+  <div class="d-flex justify-content-center">
+    <h1>Albion Online labourer profits per journal</h1>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block body %}
+<div class="container" style = "padding-top: 10px;">
+  <div class="form-group row">
+    <div class="col-sm-4 my-auto rounded bg-primary">
+      <div class="form-group row" style = "padding-top: 20px;">
+        <label for="city" class="col-sm-4 col-form-label h5">City: </label>
+        <div class="col-sm-7">
+          <select id="city" class="form-control" placeholder="Please select a city">
+            <option selected>Please select a city...</option>
+            <option value="Bridgewatch">Bridgewatch</option>
+            <option value="Caerleon">Caerleon</option>
+            <option value="Fort sterling">Fort Sterling</option>
+            <option value="Lymhurst">Lymhurst</option>
+            <option value="Martlock">Martlock</option>
+            <option value="Thetford">Thetford</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="house" class="col-sm-4 col-form-label h5">House tier: </label>
+        <div class="col-sm-7">
+          <select id="house" class="form-control" placeholder="Please select a house tier">
+            <option selected>Please select a tier...</option>
+            <option value="T2">T2</option>
+            <option value="T3">T3</option>
+            <option value="T4">T4</option>
+            <option value="T5">T5</option>
+            <option value="T6">T6</option>
+            <option value="T7">T7</option>
+            <option value="T8">T8</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-7">
+          <button class="btn btn-primary bg-dark border border-info" id="submitbutton">Submit</button>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-7">
+          <label class = "font-weight-light" id="loader"></label>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-1"></div>
+    <div class="col-sm-7 bg-secondary font-weight-light rounded">
+      <p>Returns the profit for 1 journal. Uses the calculation: labourer material output prices + empty journal price - full journal price
+      <br>City: Selects the city market for buying the full journal and selling the labourer output materials and empty journal.
+      <br>House tier: The tier of the house and furniture inside. Assumes each labourer has the best table, bed and trophies available excluding sharks and spyglasses. This determines labourer happiness for different journals.
+      </p>
+      <p>Labourers cannot work journals higher than their own tier.
+      <br>The sales include the premium tax of 4.5%, non-premium members can expect a lower profit than shown after selling their labourer's output on the market.
+      <br>The cell is left blank if one of the journals or unenchanted materials for that journal has no current price on the city market.
+      <br>A "+" after the profit indicates market data for one or more enchanted materials from this labourer is unavailable, and the actual profit will be slightly higher.
+      </p>
+      <p></p>
+    </div>
+  </div>
+  <!-- <p>{{entry}}</p> -->
+  <!-- <label id="test"></label> -->
+  <div>
+    <div class="container text-white">
+        <table id="table" class="table table-hover table-sm table-dark">
+          <thead>
+            <tr>
+              <th data-field="lab" data-width="60">Labourer</th>
+              <th data-field="t3" data-width="50" data-halign="center" data-align="center" >T3</th>
+              <th data-field="t4" data-width="50 data-halign="center" data-align="center" >T4</th>
+              <th data-field="t5" data-width="50 data-halign="center" data-align="center" >T5</th>
+              <th data-field="t6" data-width="50 data-halign="center" data-align="center" >T6</th>
+              <th data-field="t7" data-width="50 data-halign="center" data-align="center" >T7</th>
+              <th data-field="t8" data-width="50 data-halign="center" data-align="center" >T8</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+  document.getElementById ("submitbutton").addEventListener ("click", submitRequest, false);
+
+  function submitRequest()  {
+    //This part takes the form IDs, assigns them to a variable, then packs the variables
+    ///into the var "entry"
+    var city = document.getElementById("city");
+    var house = document.getElementById("house");
+    var loading = "Loading results for " + city.value + " with " + house.value + " house and furniture."
+    var loaded = "Displaying results for " + city.value + " with " + house.value + " house and furniture."
+
+    var entry = {
+      city: city.value,
+      house: house.value
+    };
+
+    document.getElementById("loader").innerHTML = loading;
+
+    //This part uses fetch to pack the var entry to the URL argument as a JSON
+    fetch(`${window.origin}/house/results`, {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(entry),
+      cache: "no-cache",
+      headers: new Headers({
+        "content-type": "application/json"
+      })
+    })
+      //This part takes the flask response.
+      .then(function (response) {
+        if (response.status !== 200) {
+          //Error handling
+          console.log(`Looks like there was a problem. Status code: ${response.status}`);
+          return;
+        }
+          //Turns the response from a strin in JSON format to a JSON object called "data"
+        response.json().then(function (data) {
+          console.log(data)
+          //the data JSON can have keys and values called as normal, and assigned to HTML IDs if wanted:
+          //document.getElementById("test").innerHTML = data[0]["lab"];
+          //Create the table with id "table". Note that if moved outside of this function data needs to be introduced with funciton(data) again or something
+          document.getElementById("loader").innerHTML = loaded
+          $(function() {
+            $('#table').bootstrapTable('destroy')
+            $('#table').bootstrapTable({data: data})
+          });
+
+        });
+
+      })
+      .catch(function (error) {
+        console.log("Fetch error: " + error);
+      });
+
+
+  }
+
+</script>
+{% endblock %}
+
