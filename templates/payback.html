@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}AO Labourer tool{% endblock %}
+
+{% block header %}
+<div class="center">
+<h1>Albion Online labourer payback times for labourers</h1>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+
+  function do_ajax()  {
+
+    var lab = document.getElementById("lab");
+    var tier = document.getElementById("tier");
+    var city = document.getElementById("city");
+    var happ = document.getElementById("happ");
+
+    var entry = {
+      lab: lab.value,
+      tier: tier.value
+      city: city.value
+      happ: happ.value
+    };
+
+    fetch('/',{
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(entry),
+      cache:"no-cache",
+      headers: new Headers({
+        "content-type":"application/json"
+      })
+    })
+
+  }
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="center">
+  <div>
+    <p>Uses daily labourer profit and initial setup cost to calculate the days to make back the cost of upgrading the house and furniture for 3 labourers</p>
+    <p>City: Selects the city market for buying the full journal and selling the labourer output materials and empty journal.</p>
+    <p>Happiness: The labourer happiness, this acts as a multiplier for their material output. Labourers can only work between 50 and 150% happiness.</p>
+    <p>A value of "N/A" is shown when one of the journals or materials for that journal has no current price on the city market.</p>
+    <p>Prices provided by the Albion Data Project.</p>
+    <p>NEWBY is recruiting</p>
+    <p></p>
+  </div>
+  <p> </p>
+  <div class="form-group">
+
+    <form action="/payback" method="post">
+      </p>
+      <p>
+        <label for= "city">City: </label>
+        <select id="city" name = "cityDropdown">
+          <option value="bridgewatch">Bridgewatch</option>
+            <option value="caerleon">Caerleon</option>
+            <option value="fort sterling">Fort Sterling</option>
+            <option value="lymhurst">Lymhurst</option>
+            <option value="martlock">Martlock</option>
+            <option value="thetford">Thetford</option>
+        </select>
+      </p>
+      <p>
+        <label for= "happ">Happiness: </label>
+        <input class="form-control" id="happ" name= "happ" rows="1" placeholder="(50% -> 150%)"></textarea>
+      </p>
+
+<!--      <label>Name:<input type="text" id="name" value="" /></label> -->
+<!--      <button class="btn btn-primary" onclick="do_ajax();">Request profit</button> -->
+    <p><input type="submit"></p>
+  </form>
+  <p>Results shown for {{entry}}</p>
+
+
+  </div>
+</div>
+<div class="center">
+<table>
+  <tr>
+    <td>Tier 3</td>
+    <td>Tier 4</td>
+    <td>Tier 5</td>
+    <td>Tier 6</td>
+    <td>Tier 7</td>
+    <td>Tier 8</td>
+    <td>Labourer</td>
+  </tr>
+  {% for lab,dict in payback.items() %}
+  <tr>
+      <td>{{dict["t3"]}}</td>
+      <td>{{dict["t4"]}}</td>
+      <td>{{dict["t5"]}}</td>
+      <td>{{dict["t6"]}}</td>
+      <td>{{dict["t7"]}}</td>
+      <td>{{dict["t8"]}}</td>
+      <td>{{lab}}</td>
+  </tr>
+  {% endfor %}
+</table>
+</div>
+
+{% endblock %}
