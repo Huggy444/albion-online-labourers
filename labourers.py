@@ -83,7 +83,7 @@ class Query():
         happ = self.calculate_happiness(lab,tier,lab_type)
         #print(f"{lab}, for {self.house} house, with {tier} journal, happiness ratio = {happ}")
         #If happiness was < 50% it was instead set to 0 as labs will not work under 50%. Turn that into an N/A output.
-        if happ != 0:
+        if happ != 0 and self.profits[lab][tier] != "":
             self.profits[lab][tier] = self.profits[lab][tier]*happ
         elif happ == 0:
             self.profits[lab][tier] = ""
