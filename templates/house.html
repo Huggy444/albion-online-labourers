@@ -105,8 +105,6 @@
 
   function submitRequest()  {
 
-    waitForIt();
-    
     //This part takes the form IDs, assigns them to a variable, then packs the variables
     ///into the var "entry"
     var city = document.getElementById("city");
@@ -159,17 +157,7 @@
 
 
   }
-function waitForIt() {
-  if (!buttonpressed ) {
-  setTimeout(waitForIt,2500);
-  } else {
- document.getElementById('info').value='ok';
-  }
-}
 
-function setButtonPressed() {
- buttonpressed = true;
-}
 
 </script>
 {% endblock %}
