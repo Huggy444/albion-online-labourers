@@ -25,6 +25,7 @@
             <option value="Lymhurst">Lymhurst</option>
             <option value="Martlock">Martlock</option>
             <option value="Thetford">Thetford</option>
+            <option value="All">Average all cities</option>
           </select>
         </div>
       </div>
@@ -62,11 +63,12 @@
     <div class="col-sm-7 bg-secondary font-weight-light rounded">
       <p>Returns the profit for 1 journal. Uses the calculation: labourer material output prices + empty journal price - full journal price
       <br>City: Selects the city market for buying the full journal and selling the labourer output materials and empty journal.
-      <br>House tier: The tier of the house and furniture inside. Assumes each labourer has the best table, bed and trophies available excluding sharks and spyglasses. This determines labourer happiness for different journals.
+      <br>House tier: The tier of the house and furniture inside. Assumes each labourer has the best table, bed and trophies available excluding sharks and spyglasses. 
       </p>
       <p>Labourers cannot work journals higher than their own tier.
       <br>The sales include the premium tax of 4.5%, non-premium members can expect a lower profit than shown after selling their labourer's output on the market.
       <br>The cell is left blank if one of the journals or unenchanted materials for that journal has no current price on the city market.
+      <br>"Average all cities" uses average current journal and material prices for the 6 royal cities.
       <br>A "+" after the profit indicates market data for one or more enchanted materials from this labourer is unavailable, and the actual profit will be slightly higher.
       </p>
       <p></p>
@@ -102,6 +104,7 @@
   document.getElementById ("submitbutton").addEventListener ("click", submitRequest, false);
 
   function submitRequest()  {
+
     //This part takes the form IDs, assigns them to a variable, then packs the variables
     ///into the var "entry"
     var city = document.getElementById("city");
@@ -154,6 +157,7 @@
 
 
   }
+
 
 </script>
 {% endblock %}
