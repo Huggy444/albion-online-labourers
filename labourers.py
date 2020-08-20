@@ -277,7 +277,10 @@ def current_price_search(query):
                 else:
                     query.prices[item] += new_price
                     count += 1
-            query.prices[item] = query.prices[item] / count
+            try:
+                query.prices[item] = query.prices[item] / count
+            except ZeroDivisionError:
+                query.prices[item] = 0
             #print (query.prices[item])
             
 def weekly_price_search_old(query):
@@ -336,7 +339,8 @@ def current_book_price_search(query):
                 query.journal_prices[book] = price
             else:
                 query.journal_prices[book] = 0
-            
+
+    
     else:
         for i in range(0,len(text),6):
             count = 0
@@ -350,9 +354,16 @@ def current_book_price_search(query):
                 else:
                     query.journal_prices[book] += new_price
                     count += 1
-            query.journal_prices[book] = query.journal_prices[book] / count
+            try:        
+                query.journal_prices[book] = query.journal_prices[book] / count
+            except ZeroDivisionError:
+                query.journal_prices[book] = 0
             #print (query.journal_prices[book])
 
+#     print (query.journals)
+#     print (text)
+#     print (query.journal_prices) 
+            
 def weekly_book_price_search(query):    
     for item in query.journals:
     
