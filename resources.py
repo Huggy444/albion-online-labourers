@@ -1,6 +1,6 @@
 #Establish static objects
 tier_list = ["t3","t4","t5","t6","t7","t8"]
-lab_list = ["fiber","hide","hunter","mage","ore","stone","toolmaker","warrior","wood","fishing"]
+lab_list = ["fiber","fishing","hide","hunter","mage","ore","stone","toolmaker","warrior","wood"]
 
 #Establish a list of the basic materials returned, to create a list of all materials for the API query
 base_materials = ["cloth","fiber","hide","leather","metalbar","ore","planks","rock","wood"]
