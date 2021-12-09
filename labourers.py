@@ -489,10 +489,6 @@ def form_fishing_outputs(fish_list,include_t2):
 fish_types = ["fish_freshwater_all_common","fish_saltwater_all_common","fish_freshwater_forest_rare",
             "fish_freshwater_mountain_rare","fish_freshwater_highlands_rare","fish_freshwater_steppe_rare",
             "fish_freshwater_swamp_rare","fish_saltwater_all_rare"]
-from resources import tier_list,lab_list,base_materials,base_loot_amounts,happ_dict,laborer_outputs,t2_tier_list
-
-app = Flask(__name__)
-
 
 @app.route("/happiness/results", methods=["POST"])
 def create_entry_happ():
