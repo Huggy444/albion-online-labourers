@@ -61,38 +61,70 @@
     </div>
     <div class="col-sm-1"></div>
     <div class="col-sm-7 bg-secondary font-weight-light rounded">
-      <p>Returns the profit for 1 journal. Uses the calculation: labourer material output prices + empty journal price - full journal price
-      <br>City: Selects the city market for buying the full journal and selling the labourer output materials and empty journal.
-      <br>House tier: The tier of the house and furniture inside. Assumes each labourer has the best table, bed and trophies available excluding sharks and spyglasses. 
+      <p>Returns the profit for 1 journal. 
+	  <br>City: Selects the city market for buying the full journal and selling the labourer output materials and empty journal.
+      <br>House tier: The tier of the house and furniture inside. Assumes all applicable trophies are used excluding sharks and spyglasses.
+	  <br>Uses the calculation: (labourer material output prices + empty journal price)*0.955 - full journal price
+	  <br>The sales include the premium tax and setup fee of 4.5%, non-premium members can expect a slightly lower profit than shown.
       </p>
       <p>Labourers cannot work journals higher than their own tier.
-      <br>The sales include the premium tax of 4.5%, non-premium members can expect a lower profit than shown after selling their labourer's output on the market.
-      <br>The cell is left blank if one of the journals or unenchanted materials for that journal has no current price on the city market.
       <br>"Average all cities" uses average current journal and material prices for the 6 royal cities.
-      <br>A "+" after the profit indicates market data for one or more enchanted materials from this labourer is unavailable, and the actual profit will be slightly higher.
       </p>
       <p></p>
     </div>
   </div>
   <!-- <p>{{entry}}</p> -->
   <!-- <label id="test"></label> -->
-  <div>
-    <div class="container text-white">
-        <table id="table" class="table table-hover table-sm table-dark">
-          <thead>
-            <tr>
-              <th data-field="lab" data-width="60">Labourer</th>
-              <th data-field="t3" data-width="50" data-halign="center" data-align="center" >T3</th>
-              <th data-field="t4" data-width="50 data-halign="center" data-align="center" >T4</th>
-              <th data-field="t5" data-width="50 data-halign="center" data-align="center" >T5</th>
-              <th data-field="t6" data-width="50 data-halign="center" data-align="center" >T6</th>
-              <th data-field="t7" data-width="50 data-halign="center" data-align="center" >T7</th>
-              <th data-field="t8" data-width="50 data-halign="center" data-align="center" >T8</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-  </div>
+	<div class="form-group row">
+		<div class="container text-white">
+			<table id="table" class="table table-hover table-sm table-dark">
+			  <thead>
+				<tr>
+				  <th data-field="lab" data-width="60">Labourer</th>
+				  <th data-field="t3" data-width="50" data-halign="center" data-align="center" >T3</th>
+				  <th data-field="t4" data-width="50 data-halign="center" data-align="center" >T4</th>
+				  <th data-field="t5" data-width="50 data-halign="center" data-align="center" >T5</th>
+				  <th data-field="t6" data-width="50 data-halign="center" data-align="center" >T6</th>
+				  <th data-field="t7" data-width="50 data-halign="center" data-align="center" >T7</th>
+				  <th data-field="t8" data-width="50 data-halign="center" data-align="center" >T8</th>
+				</tr>
+			  </thead>
+			</table>
+		  </div>
+	</div>
+	<div class="form-group row justify-content-md-center">
+		<div class="text-center col-sm-12 bg-secondary font-weight-light rounded">
+			<p>Click on a cell in the above table to see the prices and projected material returns used to calculate profit.</p>
+			<p>Reminder that the above table includes the 4.5% market sales tax and setup fee on labourer products</p>
+		</div>
+	<div class="text-center col-sm-12 my-auto rounded bg-primary">
+      <label class = "font-weight-light" id="price_title"></label>
+    </div>
+	<div class="row justify-content-around">
+		<div class="form-group row justify-content-md-center">
+				<div class="container text-white">
+				<form id="price_form">
+					<table id="price_table" class="table table-hover table-sm table-dark">
+						<thead>
+						<tr>
+						  <th data-field="item_id" data-width="60">Item ID</th>
+						  <th data-field="item_price" data-width="50" data-halign="center" data-align="center">Price</th>
+						  <th data-field="item_quant" data-width="60">Quantity</th>
+						  <th data-field="sell_value" data-width="50" data-halign="center" data-align="center" >Total value</th>
+						</tr>
+						</thead>
+						<tbody id="price_table_body">
+						</tbody>
+					</table>
+				</form>
+				</div>
+			<div class="col-sm-1"></div>
+		</div>
+		<div class="text-center col-sm-3 my-auto rounded bg-primary">
+		<label for="total_profit">Estimated Profit (After 4.5% tax):</label>
+		<label class = "font-weight-light" id="total_profit"></label>
+		</div>
+	</div>
 </div>
 
 
@@ -101,12 +133,11 @@
 
 {% block script %}
 <script>
+//Send user query with CITY and HOUSE TIER to back end. Recieves a response containing PROFITs and LABOURER PRICEs. PROFITS are immediately displayed in "table"
   document.getElementById ("submitbutton").addEventListener ("click", submitRequest, false);
 
   function submitRequest()  {
 
-    waitForIt();
-    
     //This part takes the form IDs, assigns them to a variable, then packs the variables
     ///into the var "entry"
     var city = document.getElementById("city");
@@ -118,8 +149,14 @@
       city: city.value,
       house: house.value
     };
+	
+	console.log(entry)
 
     document.getElementById("loader").innerHTML = loading;
+		
+	//Make CITY and HOUSE TIER global for the price list title
+	globalThis.city = city
+	globalThis.house = house
 
     //This part uses fetch to pack the var entry to the URL argument as a JSON
     fetch(`${window.origin}/house/results`, {
@@ -138,17 +175,19 @@
           console.log(`Looks like there was a problem. Status code: ${response.status}`);
           return;
         }
-          //Turns the response from a strin in JSON format to a JSON object called "data"
+          //Turns the response from a string in JSON format to a JSON object called "data"
         response.json().then(function (data) {
+		globalThis.data = data
           console.log(data)
           //the data JSON can have keys and values called as normal, and assigned to HTML IDs if wanted:
           //document.getElementById("test").innerHTML = data[0]["lab"];
-          //Create the table with id "table". Note that if moved outside of this function data needs to be introduced with funciton(data) again or something
+          //Create the table with id "table". Note that if moved outside of this function data needs to be introduced with function(data) again or something
           document.getElementById("loader").innerHTML = loaded
           $(function() {
             $('#table').bootstrapTable('destroy')
-            $('#table').bootstrapTable({data: data})
+            $('#table').bootstrapTable({data: data[0]})
           });
+          // ADD PRICE LIST WITH data[1]
 
         });
 
@@ -159,17 +198,84 @@
 
 
   }
-function waitForIt() {
-  if (!buttonpressed ) {
-  setTimeout(waitForIt,2500);
-  } else {
- document.getElementById('info').value='ok';
-  }
-}
 
-function setButtonPressed() {
- buttonpressed = true;
-}
+//On clicking a cell in "table", update "price_table" with LABOURER PRICEs for that LAB and TIER.
+$('#table').on('click-cell.bs.table', function ($element, field, value, row) {
+	//field = columns, row = row (Comes as a dictionary of cells in the row), value = cell value.
+	//The click-cell function retrieves the whole row and the field of the selected cell.
+	//This excludes the far left labourer column from the function
+ 	if (field !="lab"){
+		//Take the labourer and tier that was clicked.
+		var lab = row["lab"];
+		var tier = field;
+		var prices = data[1][lab][tier];
+	
+		//Table construction. Use table modify plus "tr.innerHTML = '<td>' + object.subject + '</td>'" rather than loading JSON?
+		//<tr> = table row, ,<td> = table cell, <th> = table header.
+		//The table already has <th> defined in the HTML. Just need rows of data.
+		var tableBody = document.getElementById('price_table_body');
+		
+		//Remove the old price table body, <thead> is kept safe.
+		tableBody.innerHTML = '';
+		
+		//Add new rows to tbody	
+		var count = 0
+		prices.forEach(function(object) {
+		  var tr = document.createElement('tr');
+		  tr.innerHTML =
+			'<td class="item_id">' + object.item_id + '</td>' +
+			'<td>' + '<input form="price_form" id="item_price'+count+'" type="text" name="name" class="form-control" value='+ object.item_price + ' /></td>' +
+			'<td class="item_quant">' + object.item_quant + '</td>' +
+			'<td class="sell_value">' + object.sell_value + '</td>';
+		  tableBody.appendChild(tr);
+		  count = count+1
+		});	
+			
+		//Text under price_table saying "MARTLOCK market prices and returns from a T5 CROPPER in a T6 HOUSE"
+		var title = "Showing " + city.value + " market prices and returns from a " + tier + " " + lab + " in a " + house.value + " house.";
+		document.getElementById("price_title").innerHTML = title;
+		
+		//Load the profit in #table to the total_profit text
+		document.getElementById("total_profit").innerHTML = value;
+	};
+});
+
+document.getElementById("price_table").addEventListener("input", function() {
+    //Updates the profit and sell values whenever prices are edited manually.
+	var profit = 0;
+	
+		//console.log(price_form.elements);
+		//price = item_price0.value;
+		//document.getElementById("sell_value1").innerHTML = price;
+	
+	//Iterate through the table rows.
+	//For each row, calculate the new sell value from any edited prices, then add the new sell value to "profit" to calculate the new profit.
+	//JQuery: .text searches for all classes=text, #text searches for all IDs=text.
+	$('#price_table_body > tr').each(function() { 
+		if ($.isNumeric($('.form-control', this).val())) {
+			var $price = $('.form-control', this).val();
+			var $quant = $('.item_quant', this).text();
+			var $value = Math.round(($price) * ($quant));
+			$('.sell_value', this).text($value);
+		  
+			var $id = $('.item_id', this).text();
+			//Apply the 4.5% premium tax and setup fee to items that are NOT the full journal.
+			if ($id.includes("full")){
+				profit+= $value;
+			} else {
+				profit+= ($value*0.955);
+			};	
+		} else {
+		profit+=0;
+		}
+	});
+	
+	//Load the calculated profit in the label next to the prices table.
+	document.getElementById("total_profit").innerHTML = Math.round(profit)
+}, false);
+
+
+
 
 </script>
 {% endblock %}

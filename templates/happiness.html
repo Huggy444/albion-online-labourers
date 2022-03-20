@@ -136,7 +136,7 @@
           document.getElementById("loader").innerHTML = loaded
           $(function() {
             $('#table').bootstrapTable('destroy')
-            $('#table').bootstrapTable({data: data})
+            $('#table').bootstrapTable({data: data[0]})
           });
 
         });
