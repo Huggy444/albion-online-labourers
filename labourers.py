@@ -48,7 +48,7 @@ class Query():
         #Setting current calculated profit to 0 for each LAB and TIER.
         self.profits[lab][tier] = 0
         
-        ###Account for happiness (happiness HTML entry can post to carrying out this function if API prices are cached)
+        ###Account for happiness
         #If happiness was < 50% it was instead set to 0 as labs will not work under 50%.
         happiness = self.calculate_happiness(lab,tier,lab_type)
         
@@ -83,6 +83,10 @@ class Query():
         #Happiness will cause the quantity to be multiplied by: 0 OR 0.5 to 1.5
         quantity = ratio*happiness*base_loot_amounts[lab_type][tier]
         
+        #T2 gathering labourers need quantitiy corrected to account for lack of enchanted materials in weighting
+        if lab != "fishing" and tier == "t3":
+            quantity = quantity/0.9445
+        
         #Seaweed is unique in that when rewarded it returns more than 1 item.
         #So if base loot amount is 10, and 2 seaweed are awarded per proc, a total of 20 seaweed could be returned from the journal.
         if item == "t1_seaweed":
@@ -103,7 +107,7 @@ class Query():
     def calculate_happiness(self,lab,tier,lab_type):
         #Covers if the request was made with HAPPINESS:
         if self.house == None:
-            return float(self.happ)
+            return self.happ
         #Covers if the request was made with HOUSE TIER:
         if self.happ == None:
             #Remove the "T" to get the number of the tier for the house and examined labourer. Ie T7 (Tier 7) becomes 7.
@@ -355,12 +359,9 @@ def create_entry_house():
     #POST request, as fetch request from the user has been recieved. Follow the process:
     #1) Check_time, to see if old_prices need updating
     #2) Recieve the fetch request from the front end
-    #3) Check to see if the front end has sent manual prices (Some POSTs will). If recieving them, use them
-                #3.0.1) Sanitise typed user input
-        #3.1) if not recieving them, read the prices.json and use that.
-    #4) Recieve the CITY and HOUSE TIER from the fetch request
-    #5) Use the prices of the requested CITY to calculate profits for the requestd HOUSE TIER
-    #6) Send profits JSON to the user.
+    #3) Retrieve the CITY and HOUSE TIER/HAPPINESS from the fetch request
+    #4) Use the prices of the requested CITY to calculate profits for the requestd HOUSE TIER
+    #5) Send profits JSON to the user.
     
     #1)
     check_time(time_stamp)
@@ -371,35 +372,43 @@ def create_entry_house():
     req = request.get_json()
     print(req)
     
-    #3)FRONT END FUNCTIONALITY.
-    #Will send a JSON back, probably in the format: {item_id:price}
-    #If this is recieved, should I ignore the CITY and prices.json data, or do a comparison to see if it matches?
-    #Maybe as a starting point, have it be uneditable but the user can see why something is fucked
-    #This would just involve sending the main result + item prices to the user, a list of the 2 as a JSON.
-    
-    #4)Handling CITY and HOUSE TIER
+    #3)Handling CITY and HOUSE TIER
     ##Pull CITY from fetch
     request_city = req["city"].lower()
     #Validate city
-    if request_city == "Please select a city...":
+    if request_city == "unselected city":
         return None
     elif request_city == "all":
         request_city = "average"
     
-    ##Pull HOUSE TIER from fetch
-    request_house = req["house"].lower()
-    #Validate house tier
-    if request_house == "Please select a tier...":
-        return None
+    ##Pull Happiness from fetch
+    try:
+        #Validate happiness
+        request_happ = float(req["happ"].lower())        
+        if request_happ < 50 or request_happ > 150:
+            return None
+        #Convert happiness to a multiplier where 1 = 100%
+        request_happ = request_happ / 100
+        #Set request_house to none so it is not used by the profit calculation
+        request_house = None
 
-    #5)
+    ##If pulling happiness fails, try to pull house tier
+    except:
+        request_house = req["house"].lower()
+        #Validate house tier
+        if request_house == "unselected tier":
+            return None
+        #Set request_happ to none so it is not used by the profit calculation
+        request_happ = None
+
+    #4)
     #Form query class from user input
-    query = Query(city = request_city, house = request_house, happiness = None)
+    query = Query(city = request_city, house = request_house, happiness = request_happ)
 
     #Perform the main API search and Fetch response function
     res = calculation(query)
     
-    #6)
+    #5)
     return res
 
 @app.route("/house")
