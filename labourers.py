@@ -416,6 +416,10 @@ def house_page():
     #GET request. Send the house html file so the user can select a CITY and HOUSE TIER
     return render_template("house.html")
 
+@app.route("/happiness")
+def index():
+    return redirect(url_for("house_page"))
+
 @app.route("/")
 def index():
     return redirect(url_for("house_page"))
