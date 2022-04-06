@@ -417,7 +417,7 @@ def house_page():
     return render_template("house.html")
 
 @app.route("/happiness")
-def index():
+def happiness_page():
     return redirect(url_for("house_page"))
 
 @app.route("/")
