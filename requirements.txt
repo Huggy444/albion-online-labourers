@@ -8,6 +8,6 @@ itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
 requests==2.24.0
-ujson==3.0.0
+ujson==5.2.0
 urllib3==1.25.9
 Werkzeug==1.0.1
