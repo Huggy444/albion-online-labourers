@@ -12,9 +12,9 @@ base_loot_amounts = {"crafter":{"t3":24,"t4":16,"t5":8,"t6":5.333,"t7":4.4651,"t
 
 #Dictionary of the happinesses of a house and furniture of a tier. 
     #I.e. a t4 house with t4 bed,t4 table, and trophies up to t4 gives 415 happiness for a CRAFTER
-happ_dict= {"crafter":{"t2":205,"t3":310,"t4":415,"t5":520,"t6":625,"t7":730,"t8":835},
-            "gatherer":{"t2":210,"t3":320,"t4":430,"t5":540,"t6":650,"t7":760,"t8":870},
-            "fisher":{"t2":210,"t3":320,"t4":430,"t5":540,"t6":650,"t7":760,"t8":870}}
+happ_dict = {"crafter":{"t2":205,"t3":310,"t4":415,"t5":520,"t6":625,"t7":730,"t8":835},
+            "gatherer":{"t2":215,"t3":330,"t4":445,"t5":560,"t6":675,"t7":780,"t8":885},
+            "fisher":{"t2":215,"t3":330,"t4":445,"t5":560,"t6":675,"t7":780,"t8":885}}
             #Note fishers have the same happiness as gatherer here, there are fishing trophies
 
 
