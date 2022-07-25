@@ -60,7 +60,7 @@ fishing_ratios = {'t2': {'t1_seaweed':10/106,'t1_fish_freshwater_all_common': 24
     't3_fish_freshwater_avalon_rare': 10/399},
 
     't5': {'t1_seaweed':46/786, 't3_fish_freshwater_all_common': 100/786, 't4_fish_freshwater_all_common': 100/786, 't5_fish_freshwater_all_common': 100/786, 
-    't3_fish_saltwater_all_common': 100/786, 't4_fish_saltwater_all_common': 10/786, 't5_fish_saltwater_all_common': 100/786, 
+    't3_fish_saltwater_all_common': 100/786, 't4_fish_saltwater_all_common': 100/786, 't5_fish_saltwater_all_common': 100/786, 
     't3_fish_freshwater_forest_rare': 10/786, 't3_fish_freshwater_mountain_rare': 10/786, 't3_fish_freshwater_highlands_rare': 10/786, 't3_fish_freshwater_steppe_rare': 10/786, 't3_fish_freshwater_swamp_rare': 10/786, 't3_fish_saltwater_all_rare': 10/786, 
     't5_fish_freshwater_forest_rare': 10/786, 't5_fish_freshwater_mountain_rare': 10/786, 't5_fish_freshwater_highlands_rare': 10/786, 't5_fish_freshwater_steppe_rare': 10/786, 't5_fish_freshwater_swamp_rare': 10/786, 't5_fish_saltwater_all_rare': 10/786,
     't3_fish_freshwater_avalon_rare': 10/786, 't5_fish_freshwater_avalon_rare': 10/786},
